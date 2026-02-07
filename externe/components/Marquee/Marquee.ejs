@@ -1,0 +1,128 @@
+<%
+//   Компонент <marquee>: карусель изображений с поддержкой бесшовного скролла (marquee)
+//   Использует <ul> и <li> для структуры слайдов и подключает компонент <Image> для каждого элемента
+  
+//   Основные особенности:
+//   1. marquee_component.block — имя блока для модификации CSS-классов (по умолчанию 'marquee')
+//   2. marquee_component.images — массив объектов изображений, каждый объект должен содержать атрибуты для <Image>:
+//      - src, alt, width, height, loading, decoding, srcset и type
+//   3. Внутренний <ul class="marquee__inner"> получает атрибут data-fsc-marquee для инициализации скролла
+//   4. Каждый <li class="marquee__item"> содержит один компонент <Image> с переданными параметрами
+  
+//   Пример использования компонента:
+//   <\%- include('externe/components/marquee/marquee.ejs', {
+//        marquee_component: {
+//            this: {
+//			    parent: 'parentClass',
+//			    class: ['childClass'],
+//			    tag: 'div',
+//			    style: ['customStyle'],
+//			    dataAttribute: ['customDataAttributes'] 
+//		      }
+//            images: [
+//              {
+//                src: 'src',
+//                alt: 'alt',
+//                width: 600,
+//                height: 400,
+//                loading: 'lazy',
+//                decoding: 'async'
+//              }
+//            ],
+//            data: [
+//              'someText'
+//            ]
+//        }
+//    }) %>
+%>
+
+<% 
+    if(typeof marquee_component === 'undefined' || !marquee_component) {
+        return
+    }
+
+    var marqueeImages = undefined
+    var marqueeData = undefined
+
+    var thisClass = 'marquee'
+	if(
+        (typeof marquee_component.this !== 'undefined' && marquee_component.this) &&
+        (typeof marquee_component.this.parent !== 'undefined' && marquee_component.this.parent)
+    ) {
+		thisClass = `${marquee_component.this.parent}__marquee marquee`
+	} else if(
+        (typeof marquee_component.this !== 'undefined' && marquee_component.this) &&
+        (typeof marquee_component.this.class !== 'undefined' && marquee_component.this.class)
+    ) {
+        if(typeof marquee_component.this.class === 'string') {
+			thisClass = `${marquee_component.this.class} marquee`
+		} else if(typeof marquee_component.this.class === 'object') {
+			thisClass = `${marquee_component.this.class.join(' ')} marquee`
+		}
+    }
+
+    var thisTag = 'article'
+	if(
+		(typeof marquee_component.this !== 'undefined' && marquee_component.this) &&
+		(typeof marquee_component.this.tag !== 'undefined' && marquee_component.this.tag)
+	) {
+		thisTag = marquee_component.this.tag
+	}
+
+    var thisStyles = undefined
+    if(
+		(typeof marquee_component.this !== 'undefined' && marquee_component.this) &&
+		(typeof marquee_component.this.style !== 'undefined' && marquee_component.this.style)
+	) {
+        if(typeof marquee_component.this.style === 'string') {
+			thisStyles = `style='${marquee_component.this.style}'`
+		} else if(typeof marquee_component.this.style === 'object') {
+			thisStyles = `style='${marquee_component.this.style.join(' ')}'`
+		}
+	}
+
+    var thisDataAttributes = 'data-fsc-marquee'
+	if(
+		(typeof marquee_component.this !== 'undefined' && marquee_component.this) &&
+		(typeof marquee_component.this.dataAttribute !== 'undefined' && marquee_component.this.dataAttribute)
+	) {
+		if(typeof marquee_component.this.dataAttribute === 'string')
+        {
+            thisDataAttributes += ' ' + marquee_component.this.dataAttribute
+        }
+        else if(typeof marquee_component.this.dataAttribute === 'object')
+        {
+            thisDataAttributes += ' ' + marquee_component.this.dataAttribute.join(' ')
+        }
+        
+	}
+
+    if(typeof marquee_component.images !== 'undefined' && marquee_component.images) {
+        marqueeImages = marquee_component.images
+    } else if(typeof marquee_component.data !== 'undefined' && marquee_component.data) {
+        marqueeData = marquee_component.data
+    }
+%>
+
+<<%=thisTag%> class='<%=thisClass%>' <%-thisStyles%>>
+    <ul class="marquee__inner" <%-thisDataAttributes%>>
+        <% if(typeof marqueeImages !== 'undefined' && marqueeImages) { %>
+            <% for(const image of marqueeImages) { %>
+                <li class="marquee__item" data-fsc-marquee-item>
+                    <%- include('../Image/Image.ejs', {
+                        image_component: {
+                            block: 'marquee',
+                            img: image
+                        } 
+                    }) %>
+                </li>           
+            <% } %>
+        <% } else if(typeof marqueeData !== 'undefined' && marqueeData) { %>
+            <% for(const item of marqueeData) { %>
+                <li class="marquee__item" data-fsc-marquee-item>
+                    <%= item %>
+                </li>           
+            <% } %>
+        <% } %>
+    </ul>
+</<%=thisTag%>>

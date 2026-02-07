@@ -1,0 +1,171 @@
+[data-fsc-combobox-id] {
+    --animationDuration: .5s;
+    --animationDelay: .3s;
+    --maxHeightDuration: .8s;
+    --z-index: 1;
+
+    ul {
+        padding: unset;
+        margin: unset;
+
+        li::marker {
+            content: none;
+        }
+    }
+    &[data-fsc-combobox-prestyled] {
+        position: relative;
+        display: flex;
+        
+        svg {
+            &[data-fsc-combobox-input-icon-dispose],
+            &[data-fsc-combobox-p-icon],
+            &[data-fsc-combobox-input-icon-close] {
+                position: absolute;
+                z-index: var(--z-index);
+                top: 50%;           
+                right: 7px;
+                transform: translate(0, -50%);
+                transform-origin: center;
+                transition: transform var(--animationDuration) ease-in-out var(--animationDelay);      
+                width: 14px;
+                height: 14px;      
+                cursor: pointer;
+            }
+            &[data-fsc-combobox-input-icon-close] {
+                width: 14px;
+                height: 14px;
+                right: 21px;
+                visibility: hidden;
+                opacity: 0;
+                transition: visibility var(--animationDuration) ease-in-out var(--animationDelay), opacity var(--animationDuration) ease-in-out var(--animationDelay);
+            }
+        }
+        ul {
+            position: absolute;
+            background-color: #fff;
+            z-index: calc(var(--z-index) + 2);
+            top: 100%;
+            max-height: 0;
+            width: 100%;
+            overflow: auto;
+            border-radius: 8px;
+            transition: max-height var(--maxHeightDuration) ease-in-out, opacity var(--animationDuration) ease-in-out var(--animationDelay), visibility var(--animationDuration) ease-in-out var(--animationDelay);
+            opacity: 0;
+            visibility: hidden;
+
+            li {
+                cursor: pointer;
+
+                p {
+                    position: relative;
+                }
+            }
+        }
+
+        input {
+            flex: 1;
+            z-index: var(--z-index);
+        }
+        label {
+             z-index: calc(var(--z-index) + 1);
+        }
+        
+        &[data-fsc-combobox-prestyledtype='full'] {       
+            flex-flow: column nowrap;
+            min-width: 220px;
+
+            label {
+                position: absolute;
+                top: -12px;
+                left: 8px;
+                font-size: 14px;
+                background-color: #fff;
+                padding: 3px;
+            }
+            input {
+                padding: 20px 10px;
+                border-radius: 8px;
+                font-size: 18px;
+                line-height: 23px;
+                outline: unset;
+                border: 2px solid black;
+                background-color: #fff;
+
+                &:focus,
+                &:focus-visible {
+                    border-color: #2e3aa8;
+                }
+            }
+            svg {
+                &[data-fsc-combobox-input-icon-dispose] {
+                    width: 30px;
+                    height: 30px;
+                }
+                &[data-fsc-combobox-input-icon-close] {
+                    width: 30px;
+                    height: 30px;
+                    right: 40px;
+                }
+            }
+            
+            ul {                
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1), 0 6px 15px rgba(0, 0, 0, 0.3);
+
+                li {
+                    padding: 12px;
+
+                    p {
+                        margin: unset;
+                        font-weight: 500;
+                        font-size: 18px;
+                        line-height: 23px;
+                    }
+
+                    span[data-fsc-combobox-highlited] {
+                        color: rgb(255, 71, 172);
+                    }
+
+                    @media (hover: hover) and (pointer: fine) {
+                        &:hover {
+                            background-color: rgb(255, 71, 172);
+
+                            span[data-fsc-combobox-highlited] {
+                                color: rgb(255, 255, 255);
+                            }
+                        }
+                    }
+                }
+            }     
+        }
+
+        &[data-fsc-combobox-collapsed='true'] {
+            --animationDelay: 0s;
+           
+            ul {
+                max-height: 50dvh;
+                opacity: 1;
+                visibility: visible;
+            }
+
+            svg {
+                &[data-fsc-combobox-input-icon-dispose] {
+                    transform: translate(0, -50%) rotate(180deg);
+                }
+                &[data-fsc-combobox-input-icon-close] {
+                    opacity: 1;
+                    visibility: visible;
+                }
+            }
+        }
+    }
+   
+}
+
+[data-fsc-combobox-blank] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100%;
+    z-index: var(--z-index);
+}

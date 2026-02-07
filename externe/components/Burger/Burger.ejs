@@ -1,0 +1,26 @@
+<%
+// Пример вызова в шаблоне (EJS):
+//
+// <\%- include('externe/components/Burger/Burger.ejs', { 
+//	burger_component: {
+//		this: {
+//			parent: 'parentClass',
+//			class: ['childClass'],
+//			tag: 'button',
+//			style: ['customStyle'],
+//			dataAttribute: ['customDataAttributes'], 
+//		}
+//	}
+//	}) %>
+%>
+<% 
+    if(typeof burger_component === 'undefined' || !burger_component) {
+        return
+    }
+       
+    var {thisClass, blockClass, thisTag, thisStyles, thisDataAttributes} = externe.setupEJSComponent({...burger_component, componentName: 'burger'})
+%>
+
+<<%=thisTag%> <%-thisDataAttributes%> class='<%=thisClass%>' <%-thisStyles%>>
+    <span></span>
+</<%=thisTag%>>

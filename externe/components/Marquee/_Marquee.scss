@@ -1,0 +1,29 @@
+[data-fsc-marquee-carousel] {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    animation: carousel_animate 60s linear infinite;
+    will-change: transform;
+
+    @keyframes carousel_animate {
+        0% {
+            transform: translate3d(0, 0, 0);
+        }
+        50% {
+            transform: translate3d(-100%, 0, 0);
+        }
+        0% {
+            transform: translate3d(0, 0, 0);
+        }
+    }
+}
+
+.marquee {
+    overflow: hidden;
+    mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 12.5%, rgb(0, 0, 0) 87.5%, rgba(0, 0, 0, 0) 100%);
+}
+[data-fsc-marquee] {
+    will-change: transform;
+    display: flex;
+    align-items: center;
+}
