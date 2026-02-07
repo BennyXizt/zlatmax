@@ -1,4 +1,5 @@
 @use "sass:map";
+@use "sass:math";
 
 :root {
   line-height: map.get($BASE, line_height);
@@ -58,28 +59,30 @@ body {
 }
 
 .container {
+    $padding_x: map.get($BASE, container_padding_x);
+
     width: 100%;
     margin: 0 auto;
-    @include rem((
-      padding: 0 map.get($BASE, container_padding_x),
-      min-width: map.get($BASE, min_width)
-    ));
-    // height: 100dvh;
+    @include rem(min-width, map.get($BASE, min_width));
 
     @if map.get($SETTINGS, responsive_type) == 1 {
-      @include rem(max-width, map.get(map.get($CONTAINER, normal), max-width));
+      @include rem((
+        padding: 0 math.div($padding_x, 2),
+        max-width: (map.get($BASE, max_width) + $padding_x)
+      ));
     }
     @else if map.get($SETTINGS, responsive_type) == 2 {
       max-width: 100%;
+      @include rem(padding, 0 math.div($padding_x, 2));
 
       @each $type, $props in $CONTAINER {
-        @include media($type) {
-          $padding-x: map.get($props, padding-x);
-          $max-width: map.get($props, max-width);
+        @include media($type, double) {
+          $padding_x: map.get($props, padding-x);
+          $max_width: map.get($props, max-width);
 
           @include rem((
-            max-width: ($max-width + $padding-x),
-            padding: 0 ($padding-x / 2)
+            max-width: ($max_width + $padding_x),
+            padding: 0 math.div($padding_x, 2)
           ))
         }
       }

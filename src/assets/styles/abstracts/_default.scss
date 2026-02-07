@@ -1,28 +1,33 @@
 $DEFAULT_CONTAINER: (
     mobile: (
-        width: 575.98px,
+        media: 575.98px,
         max-width: 540px,
-        padding-x: (30px * 2)
+        padding-x: (15px * 2)
     ),
     tablet: (
-        width: 767.98px,
+        media: 767.98px,
         max-width: 720px,
-        padding-x: (30px * 2)
+        padding-x: (15px * 2)
     ),
     desktop: (
-        width: 991.98px,
+        media: 991.98px,
         max-width: 960px,
-        padding-x: (30px * 2)
+        padding-x: (15px * 2)
     ),
     wide: (
-        width: 1199.98px,
+        media: 1199.98px,
         max-width: 1140px,
-        padding-x: (30px * 2)
+        padding-x: (15px * 2)
     ),
     normal: (
-        width: 1399.98px,
+        media: 1399.98px,
         max-width: 1320px,
-        padding-x: (30px * 2)
+        padding-x: (15px * 2)
+    ),
+    ultra: (
+        media: 1599.98px,
+        max-width: 1500px,
+        padding-x: (15px * 2)
     )
 );
 

@@ -180,15 +180,49 @@
 }
 
 @mixin media($breakpoint, $type: min) {
-  $size: map.get(map.get($CONTAINER, $breakpoint), width);
-  
-  @if $size {
-    @media (#{$type}-width: #{$size}) {
-      @content;
+    @if $type != double {
+        $size: map.get(map.get($CONTAINER, $breakpoint), media);
+
+        @if $size {
+            @media (#{$type}-width: #{$size}) {
+                @content;
+            }
+        }
+        @else {
+            @warn "Не задана ширина для брейкпоинта #{$breakpoint} в $MEDIA.";
+        }
     }
-  } @else {
-    @warn "Нет брейкпоинта #{$breakpoint} в $MEDIA.";
-  }
+    @else {
+        $list: map.keys($CONTAINER);
+        $currIndex: list.index($list, $breakpoint);
+
+        @if $currIndex < list.length($list) {
+            $currSize: map.get(map.get($CONTAINER, $breakpoint), media);
+            $nextBreakpoint: list.nth($list, $currIndex + 1);
+            $nextSize: map.get(map.get($CONTAINER, $nextBreakpoint), media);
+
+            @if $currSize and $nextSize {
+                @media (min-width: $currSize) and (max-width: $nextSize) {
+                    @content;
+                }
+            }
+            @else {
+                @warn "Не задана ширина для брейкпоинта #{$breakpoint} в $MEDIA.";
+            }
+        }
+        @else {
+            $currSize: map.get(map.get($CONTAINER, $breakpoint), media);
+
+            @if $currSize {
+                @media (min-width: $currSize) {
+                    @content;
+                }
+            }
+            @else {
+                @warn "Не задана ширина для брейкпоинта #{$breakpoint} в $MEDIA.";
+            }
+        }
+    }
 }
 
 @mixin text_adaptive($type, $map) {
@@ -205,7 +239,6 @@
         hyphens: auto;
         text-wrap: pretty;
         text-wrap: balance;
-        @include fluid(font-size, $font_size_first $font_size_last);
 
         @if not math.is-unitless($line_height) {
             @include line-height($line_height, $font_size_first);
@@ -213,5 +246,7 @@
         @else {
             line-height: $line_height;
         }
+
+        @include fluid(font-size, $font_size_first $font_size_last);
     }
 } 
