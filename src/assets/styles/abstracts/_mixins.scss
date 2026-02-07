@@ -1,0 +1,217 @@
+@use "sass:meta";
+@use "sass:map";
+@use "sass:math";
+@use "sass:list";
+
+
+@mixin showFluid($initial, $min, $max, $important, $restriction, $clampedValue: null) {
+    @if(not $clampedValue) {
+        @if($important == '!important') {
+            #{$initial}: pxToRem($min)!important;
+            #{$initial}: calculateClamp($min, $max, $restriction)!important;
+
+            @supports not (#{$initial}: clamp(1px, 1vw, 1px)) {
+                @include media(desktop) {
+                    #{$initial}: pxToRem($max)!important;
+                }
+            }
+        }
+        @else {
+            #{$initial}: pxToRem($min);
+            #{$initial}: calculateClamp($min, $max, $restriction);
+
+            @supports not (#{$initial}: clamp(1px, 1vw, 1px)) {
+                @include media(desktop) {
+                    #{$initial}: pxToRem($max);
+                }
+            }
+        }
+    }
+    @else {
+        @if($important == '!important') {
+            #{$initial}: $min!important;
+            #{$initial}: $clampedValue!important;
+
+            @supports not (#{$initial}: clamp(1px, 1vw, 1px)) {
+                @include media(desktop) {
+                    #{$initial}: $max!important;
+                }
+            }
+        }
+        @else {
+            #{$initial}: $min;
+            #{$initial}: $clampedValue;
+
+            @supports not (#{$initial}: clamp(1px, 1vw, 1px)) {
+                @include media(desktop) {
+                    #{$initial}: $max;
+                }
+            }
+        }
+    }
+    
+}
+@mixin generateFluid($initial, $additional, $important: null, $restriction: $HEADERS_CLAMP_WIDTH) {
+    @if meta.type-of(list.nth($additional, 1)) == 'number' and meta.type-of(list.nth($additional, 2)) == 'number' {
+        $max: list.nth($additional, 1);
+        $min: list.nth($additional, 2);
+
+        @if list.length($additional) == 3 {
+            $tempVal: list.nth($additional, 3);
+
+            @if(meta.type-of($tempVal) == 'string' and $tempVal == '!important') {
+                $important: $tempVal;
+            }
+            @else {
+                $restriction: $tempVal;
+            }                
+        }
+        @include showFluid($initial, $min, $max, $important, $restriction);
+        
+    }
+    @else {
+        $tempMinValue: ();
+        $tempMaxValue: ();
+        $tempClampedValue: ();
+
+        @for $i from 1 through list.length($additional) {
+            @if meta.type-of(list.nth($additional, $i)) == 'list' {
+                $sublist: list.nth($additional, $i);
+
+                $max: list.nth($sublist, 1);
+                $min: list.nth($sublist, 2);
+
+                $tempMinValue: list.append($tempMinValue, pxToRem($min));
+                $tempMaxValue: list.append($tempMaxValue, pxToRem($max));
+                $tempClampedValue: list.append($tempClampedValue, calculateClamp($min, $max, $restriction));
+            }
+            @else if(meta.type-of(list.nth($additional, $i)) == 'string' and list.nth($additional, $i) == '!important') {
+                $important: list.nth($additional, $i);
+            }
+        }
+
+        @include showFluid($initial, $tempMinValue, $tempMaxValue, $important, $restriction, $tempClampedValue);
+    }
+}
+@mixin fluid($initial, $additional: null) {
+    @if meta.type-of($initial) == "map" {
+        @each $prop, $val in $initial {
+            $important: null;
+            @include generateFluid($prop, $val, $important);
+            
+        }
+    }
+    @else if $additional != null {   
+       @include generateFluid($initial, $additional);
+    }
+}
+
+@mixin clamp($initial, $additional: null) {
+    // @warn $initial;
+    @if meta.type-of($initial) == "map" {
+        @each $prop, $val in $initial {
+            $important: null;
+            #{$prop}: generateClamp($val);
+        }
+    }
+    @else if $additional != null {   
+        #{$initial}: generateClamp($additional);
+    }
+}
+@mixin clamp-reverse($initial, $additional: null) {
+    @if meta.type-of($initial) == "map" {
+        @each $prop, $val in $initial {
+            $important: null;
+            #{$prop}: generateClamp($val, true);
+        }
+    }
+    @else if $additional != null {   
+        #{$initial}: generateClamp($additional, true);
+    }
+}
+
+
+@mixin line-height($lh, $fsz) {
+    $original: calc($lh / $fsz);
+
+    line-height: calc(round($original * 100) / 100);
+}
+
+@mixin rem($initial, $additional: null, $base: null) {
+    @if not(map.get($SETTINGS, pixels_only)) {
+        @if meta.type-of($initial) == "map" {
+            @each $prop, $val in $initial {
+                #{$prop}: calculateValue($val);
+            }
+        }
+        @else if $additional != null {
+            @if($base != null) {
+                #{$initial}: calculateValue($additional, $base);
+            }
+            @else {
+                #{$initial}: calculateValue($additional);
+            }
+        }
+        @else {
+            @error "Missing second argument or incorrect usage of rem mixin.";
+        }
+    }
+    @else {
+        @if meta.type-of($initial) == "map" {
+            @each $prop, $val in $initial {
+                #{$prop}: $val;
+            }
+        }
+        @else if $additional != null {
+            #{$initial}: $additional;
+        }
+        @else {
+            @error "Missing second argument or incorrect usage of rem mixin.";
+        }
+    }
+}
+
+@mixin transform($args...) {
+  -webkit-transform: #{$args};
+  -moz-transform: #{$args};
+  -ms-transform: #{$args};
+  -o-transform: #{$args};
+  transform: #{$args}; 
+}
+
+@mixin media($breakpoint, $type: min) {
+  $size: map.get(map.get($CONTAINER, $breakpoint), width);
+  
+  @if $size {
+    @media (#{$type}-width: #{$size}) {
+      @content;
+    }
+  } @else {
+    @warn "Нет брейкпоинта #{$breakpoint} в $MEDIA.";
+  }
+}
+
+@mixin text_adaptive($type, $map) {
+    $font_size_first: map.get($map, font_size_original);
+    $font_size_last: map.get($map, font_size_adaptive);
+
+    $line_height: map.get($map, line_height);
+    $font_weight: map.get($map, font_weight);  
+
+    #{$type} {
+        font-weight: $font_weight;
+        overflow-wrap: break-word;
+        word-break: normal;
+        hyphens: auto;
+        text-wrap: pretty;
+        text-wrap: balance;
+        @include fluid(font-size, $font_size_first $font_size_last);
+
+        @if not math.is-unitless($line_height) {
+            @include line-height($line_height, $font_size_first);
+        }
+        @else {
+            line-height: $line_height;
+        }
+    }
+} 

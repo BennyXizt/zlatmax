@@ -1,0 +1,106 @@
+<%
+// Пример вызова в шаблоне (EJS):
+//
+// <\%- include('externe/components/Counter/Counter.ejs', { 
+//	counter_component: {
+//		this: {
+//			parent: 'parentClass',
+//			block: 'childBlockClass',
+//			class: ['childClass'],
+//			tag: 'article',
+//			style: ['customStyle'],
+//			dataAttribute: ['customDataAttributes'], 
+//		},
+//      value: '150'
+//	}
+//	}) %>
+%>
+<%
+	if(typeof counter_component === 'undefined' || !counter_component) {
+		return
+	}
+
+	var thisClass = 'counter'
+	var blockClass = thisClass
+	if(
+		(typeof counter_component.this !== 'undefined' && counter_component.this) &&
+		(typeof counter_component.this.block !== 'undefined' && counter_component.this.block)
+	) {
+		blockClass = counter_component.this.block
+	}
+	if(
+		(typeof counter_component.this !== 'undefined' && counter_component.this) &&
+		(typeof counter_component.this.parent !== 'undefined' && counter_component.this.parent)
+	) {
+		thisClass = `${counter_component.this.parent}__${thisClass} ${blockClass}`
+	} else if(
+		(typeof counter_component.this !== 'undefined' && counter_component.this) &&
+		(typeof counter_component.this.class !== 'undefined' && counter_component.this.class)
+	) {
+		if(typeof counter_component.this.class === 'string') {
+			thisClass = `${counter_component.this.class} ${blockClass}`
+		} else if(typeof counter_component.this.class === 'object') {
+			thisClass = `${counter_component.this.class.join(' ')} ${blockClass}`
+		}
+	} else {
+		thisClass = blockClass
+	}
+
+	var thisTag = 'article'
+	if(
+		(typeof counter_component.this !== 'undefined' && counter_component.this) &&
+		(typeof counter_component.this.tag !== 'undefined' && counter_component.this.tag)
+	) {
+		thisTag = counter_component.this.tag
+	}
+
+	var thisStyles = undefined
+	if(
+		(typeof counter_component.this !== 'undefined' && counter_component.this) &&
+		(typeof counter_component.this.style !== 'undefined' && counter_component.this.style)
+	) {
+		if(typeof counter_component.this.style === 'string') {
+			thisStyles = `style='${counter_component.this.style}'`
+		} else if(typeof counter_component.this.style === 'object') {
+			thisStyles = `style='${counter_component.this.style.join(' ')}'`
+		}
+	}
+
+	var thisDataAttributes = ''
+	if(
+		(typeof counter_component.this !== 'undefined' && counter_component.this) &&
+		(typeof counter_component.this.dataAttribute !== 'undefined' && counter_component.this.dataAttribute)
+	) {
+		if(typeof counter_component.this.dataAttribute === 'string')
+		{
+			thisDataAttributes += ' ' + counter_component.this.dataAttribute
+		}
+		else if(typeof counter_component.this.dataAttribute === 'object')
+		{
+			thisDataAttributes += ' ' + counter_component.this.dataAttribute.join(' ')
+		}
+	}
+
+	if(
+		(typeof counter_component.value !== 'undefined' && counter_component.value) &&
+		(typeof counter_component.value.end !== 'undefined' && counter_component.value.end)
+	) {
+	
+		thisDataAttributes += ` data-fsc-counter data-fsc-counter-finalvalue=${counter_component.value.end}`
+	}
+
+	var startValue = 0
+	if(
+		(typeof counter_component.value !== 'undefined' && counter_component.value) &&
+		(typeof counter_component.value.start !== 'undefined' && counter_component.value.start)
+	) {
+		startValue = counter_component.value.start
+	}
+
+%>
+
+<<%=thisTag%> class='<%=thisClass%>' <%-thisStyles%>>
+	<span <%-thisDataAttributes%>>
+		<%=startValue%>
+	</span>
+</<%=thisTag%>>

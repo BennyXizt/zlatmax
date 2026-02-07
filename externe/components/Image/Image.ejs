@@ -1,0 +1,114 @@
+<%
+  // Компонент <Image>: адаптивное изображение с поддержкой современных форматов
+  // Использует <picture> для выбора формата изображения в зависимости от поддержки браузером
+  // 1. <source type="image/webp"> — если браузер поддерживает WebP, загрузит webp-версию
+  // 2. <source type="image/jpeg"> — fallback, если WebP не поддерживается
+  // 3. <img> — обязательный элемент (fallback по умолчанию), с srcset и sizes для адаптивной загрузки
+  // Атрибуты width/height помогают избежать сдвига контента (layout shift)
+  // loading="lazy" — отложенная загрузка, улучшает производительность
+  // decoding="async" — не блокирует отрисовку страницы
+  //
+  // Пример использования компонента:
+  // <\%- include('externe/components/Image/Image.ejs', {
+  //        image_component: {
+  //           this: {
+  //             parent: 'Parent',
+  //             class: ['childClass'],
+  //             style: ['customStyle'],
+  //             dataAttribute: ['customDataAttributes']
+  //         },
+  //          img: {
+  //              src: 'src',
+  //              alt: 'alt',
+  //              width: 600,
+  //              height: 400,
+  //              loading: 'lazy',
+  //              decoding: 'async'
+  //          },
+  //          images: [
+  //              { srcset: 'srcset', type: 'image/webp' },
+  //              { srcset: 'srcset', type: 'image/png'  }
+  //          ]
+  //        }
+  // }) %>
+%>
+
+<% 
+    if(typeof image_component === 'undefined' || !image_component) {
+        return
+    }
+
+    var displayType = undefined
+    var image = undefined
+    if(
+        (typeof image_component.img !== 'undefined' && image_component.img) &&
+        (typeof image_component.images !== 'undefined' && image_component.images)       
+    ) {
+        displayType = 'picture'
+        image = image_component.img
+    }
+    else if (
+        !(typeof image_component.img !== 'undefined' && image_component.img) &&
+         (typeof image_component.images !== 'undefined' && image_component.images)
+    ) {
+        displayType = 'picture'
+        image = image_component.images[0]
+    }
+    else if(
+        (typeof image_component.img !== 'undefined' && image_component.img) &&
+        !(typeof image_component.images !== 'undefined' && image_component.images)
+    ) {
+        image = image_component.img
+        displayType = 'image'
+    }
+
+
+   var {thisClass, blockClass, thisTag, thisStyles, thisDataAttributes} = externe.setupEJSComponent({...image_component, componentName: 'image'})
+            
+%>
+
+
+<% if(
+    (typeof image_component !== 'undefined' && image_component) &&
+    (typeof displayType !== 'undefined' && displayType)
+) { %>
+    <figure <%-thisDataAttributes%> class='<%=thisClass%>' <%-thisStyles%>>
+        <% if(displayType === 'picture') { %>
+            <picture>
+                <% for(const source of image_component.images) { %>
+                    <source 
+                       <% if (source.srcset) { %> srcset="<%= source.srcset %>" <% } %>
+                       <% if (source.type) { %> type="<%= source.type %>" <% } %>
+                    >
+                <% } %>
+                <img 
+                    src="<%= image.src %>"
+                    <% if (image.srcset) { %> srcset="<%= image.srcset %>" <% } %>
+                    <% if (image.sizes) { %> sizes="<%= image.sizes %>" <% } %>
+                    <% if (image.alt) { %> alt="<%= image.alt %>" <% } %>
+                    <% if (image.width) { %> width="<%= image.width %>" <% } %>
+                    <% if (image.height) { %> height="<%= image.height %>" <% } %>
+                    <% if (image.loading) { %> loading="<%= image.loading %>" <% } %>
+                    <% if (image.decoding) { %> decoding="<%= image.decoding %>" <% } %>
+                >
+            </picture>
+        <% } else { %>
+            <img 
+                src="<%= image.src %>"
+                <% if (image.srcset) { %> srcset="<%= image.srcset %>" <% } %>
+                <% if (image.sizes) { %> sizes="<%= image.sizes %>" <% } %>
+                <% if (image.alt) { %> alt="<%= image.alt %>" <% } %>
+                <% if (image.width) { %> width="<%= image.width %>" <% } %>
+                <% if (image.height) { %> height="<%= image.height %>" <% } %>
+                <% if (image.loading) { %> loading="<%= image.loading %>" <% } %>
+                <% if (image.decoding) { %> decoding="<%= image.decoding %>" <% } %>
+            >
+        <% } %>
+        <% if(typeof caption !== 'undefined' && caption) { %>
+            <figcaption>
+                <%= caption %>
+            </figcaption>
+        <% } %>
+        
+    </figure>
+<% } %>

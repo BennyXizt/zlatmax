@@ -1,0 +1,8 @@
+@use 'sass:map';
+@use 'sass:math';
+
+@each $h, $map in $HEADERS {
+    @include text_adaptive($h, $map);   
+}
+
+@include text_adaptive(p, $P);

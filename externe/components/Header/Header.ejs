@@ -1,0 +1,57 @@
+<header class="header">
+    <div class="header__container container">
+        <div class="header__body">
+            <% if(typeof header_component.homePage !== 'undefined') { %>
+                <%if(header_component.homePage === true) { %>
+                    <%- include('externe/components/Image/Image.ejs', {
+                        image_component: {
+                            this: {
+                                parent: 'header'
+                            },
+                            img: {
+                                src: '/media/icons/logo/logo.svg',
+                                alt: 'website-logo'
+                            }
+                        }
+                    })%>
+                <% } else { %>
+                    <a href="./" class="header__link-logo">
+                       <%- include('externe/components/Image/Image.ejs', {
+                            image_component: {
+                                this: {
+                                    parent: 'header'
+                                },
+                                img: {
+                                    src: '/media/icons/logo/logo.svg',
+                                    alt: 'website-logo'
+                                }
+                            }
+                        })%>
+                    </a>
+                <% } %>
+            <% } %>
+            <%- include('externe/components/HeaderMenu/HeaderMenu.ejs', {
+                header_menu_component: {
+                    list: [
+                        {'href': '#', 'anchor': 'PAGE'},
+                        {'href': '#', 'anchor': 'PAGE'},
+                        {'href': '#', 'anchor': 'PAGE'},
+                        {'href': '#', 'anchor': 'PAGE'},
+                        {'href': '#', 'anchor': 'PAGE', 'submenus': [
+                            {'href': '', 'anchor': 'SUBPAGE'},
+                            {'href': '', 'anchor': 'SUBPAGE'},
+                        ]}
+                    ],
+                    activePage: header_component.activePage ?? ''
+                }
+            }) %>
+            <%- include('externe/components/Burger/Burger.ejs', {
+                burger_component: {
+                    this: {
+                        parent: 'header'
+                    }
+                }
+            })%>
+        </div>
+    </div>
+</header>

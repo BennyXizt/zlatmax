@@ -1,0 +1,30 @@
+@import 
+        '../src/assets/styles/abstracts/default',
+        '../src/assets/styles/abstracts/variables',
+        '../src/assets/styles/abstracts/mixins',
+        '../src/assets/styles/abstracts/functions',
+        '../src/assets/styles/abstracts/placeholders';
+
+@import 
+        '../src/assets/styles/base/reset',
+        '../src/assets/styles/base/fonts',
+        '../src/assets/styles/base/typography',
+        '../src/assets/styles/base/base';
+
+
+@import
+    './components/Accordion/Accordion',
+    './components/ComboBox/ComboBox';
+
+.components {
+    h1 {
+       text-align: center;
+    }
+}
+
+.marquee {
+    ul {
+        display: flex;
+        gap: 15px;
+    }
+}

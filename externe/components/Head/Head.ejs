@@ -1,0 +1,89 @@
+<%
+    var ogTitle = undefined
+    var ogDescription = undefined
+    var twitterTitle = undefined
+    var twitterDescription = undefined
+
+    if(
+        (typeof head_component.ogTitle !== 'undefined' && head_component.ogTitle) || 
+        (typeof head_component.title !== 'undefined' && head_component.title)
+    ) {
+        ogTitle = head_component.ogTitle ? head_component.ogTitle : head_component.title
+        ogTitle = ogTitle.replace(/"/g, '&quot;')
+    }
+
+    if(
+        (typeof head_component.ogDescription !== 'undefined' && head_component.ogDescription) || 
+        (typeof head_component.description !== 'undefined' && head_component.description)
+    ) {
+        ogDescription = head_component.ogDescription ? head_component.ogDescription : head_component.description
+        ogDescription = ogDescription.replace(/"/g, '&quot;')
+    }
+
+    if(
+        (typeof head_component.twitterTitle !== 'undefined' && head_component.twitterTitle) || 
+        (typeof head_component.title !== 'undefined' && head_component.title)
+    ) { 
+        twitterTitle = head_component.twitterTitle ? head_component.twitterTitle : head_component.title
+        twitterTitle = twitterTitle.replace(/"/g, '&quot;')
+    }
+
+    if(
+        (typeof head_component.twitterDescription !== 'undefined' && head_component.twitterDescription) || 
+        (typeof head_component.description !== 'undefined' && head_component.description)
+    ) { 
+        twitterDescription = head_component.twitterDescription ? head_component.twitterDescription : head_component.description
+        twitterDescription = twitterDescription.replace(/"/g, '&quot;')
+    }
+   
+
+
+%>
+
+
+<!-- Encoding + Compatibility -->
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<!-- Responsive -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<!-- Title & head_component -->
+<title><%= head_component.title %></title>
+<% if((typeof head_component.description !== 'undefined' && head_component.description)) { %>
+    <meta name="description" content="<%= head_component.description %>" />
+<% } %>
+<% if((typeof head_component.keywords !== 'undefined' && head_component.keywords)) { %>
+    <meta name="keywords" content="<%= head_component.keywords %>" />
+<% } %>
+<% if((typeof head_component.author !== 'undefined' && head_component.author)) { %>
+    <meta name="author" content="<%= head_component.author %>" />
+<% } %>
+<!-- Open Graph (for social previews) -->
+<% if(typeof ogTitle !== 'undefined' && ogTitle) { %>
+    <meta property="og:title" content="<%= ogTitle %>" />
+<% } %>
+<% if(typeof ogDescription !== 'undefined' && ogDescription) { %>
+    <meta property="og:description" content="<%= ogDescription %>" />
+<% } %>
+<% if((typeof head_component.ogType !== 'undefined' && head_component.ogType)) { %>
+    <meta property="og:type" content="<%= head_component.ogType %>" />
+<% } %>
+<% if((typeof head_component.ogUrl !== 'undefined' && head_component.ogUrl)) { %>
+    <meta property="og:url" content="<%= head_component.ogUrl %>" />
+<% } %>
+<% if((typeof head_component.ogImage !== 'undefined' && head_component.ogImage)) { %>
+    <meta property="og:image" content="<%= head_component.ogImage %>" />
+<% } %>
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<% if(typeof twitterTitle !== 'undefined' && twitterTitle) { %>
+   <meta name="twitter:title" content="<%= twitterTitle %>" />
+<% } %>
+<% if(typeof twitterDescription !== 'undefined' && twitterDescription) { %>
+    <meta name="twitter:description" content="<%= twitterDescription %>" />
+<% } %>
+<% if((typeof head_component.twitterImage !== 'undefined' && head_component.twitterImage)) { %>
+    <meta name="twitter:image" content="<%= head_component.twitterImage %>">
+<% } %>
+<!-- Favicon -->
+<!-- Styles -->
+<!-- <link rel="stylesheet" href="./src/assets/styles/main.scss"> -->

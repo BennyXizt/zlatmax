@@ -1,0 +1,33 @@
+<%
+// Пример вызова в шаблоне (EJS):
+//
+// <\%- include('src/ejs/components/icon.ejs', { 
+//	icon_component: {
+//		this: {
+//			parent: 'parentClass',
+//			block: 'childBlockClass',
+//			class: ['childClass'],
+//			id: ['childID'],
+//			tag: 'div',
+//			style: ['customStyle'],
+//			dataAttribute: ['customDataAttributes'], 
+//		},
+//		name: 'iconName'
+//	}
+//	}) %>
+%>
+<%
+	if(typeof icon_component === 'undefined' || !icon_component) {
+		return
+	}
+
+	icon_component.this.tag = 'svg'
+
+	var {blockClass, thisClass, thisID, thisTag, thisStyles, thisDataAttributes} = externe.setupEJSComponent({...icon_component, componentName: 'icon'})
+%>
+
+<<%=thisTag%> <%-thisDataAttributes%> class='<%=thisClass%>' <%-thisID%> <%-thisStyles%>>
+	<% if(typeof icon_component.name !== 'undefined' && icon_component.name) { %>
+		<use href="/media/icons/sprite.svg#<%= icon_component.name%>"></use>   
+	<% } %>
+</<%=thisTag%>>
