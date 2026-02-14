@@ -47,3 +47,17 @@
         }
     }
 }
+
+// text
+%textMetaLarge {
+    font-weight: 600;
+    @extend %textMetaDefault;
+}
+%textMeta {
+    @include fluid(font-size, 16px 14px);
+    @include line-height(20px, 16px);
+}
+%textMetaDefault {
+    @include fluid(font-size, 18px 16px);
+    @include line-height(22px, 18px);
+}

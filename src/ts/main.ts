@@ -65,6 +65,17 @@ document.fonts.ready.then(async() => {
         onResizeModules = Array.from(loadedModules)
             .filter(([k, e]) => typeof e[`${k}OnResize`] === 'function')
             .map(e => [e[0], e[1][`${e[0]}OnResize`]])
+
+    const
+        onKeyUpModules = Array.from(loadedModules)
+            .map(([k, e]) => {
+                return Object.values(e).find(el => {
+                    if(Array.isArray(el) && el[0].name === `${k}OnKeyUp`)
+                        return true
+                    
+                })
+            })
+            .filter(e => typeof e !== 'undefined')
             
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -100,6 +111,18 @@ document.fonts.ready.then(async() => {
 
     window.addEventListener('submit', function(event) {
         onSubmitModules.forEach(e => e[1](event))
+    })
+    
+
+    onKeyUpModules.forEach(e => {
+        if(!Array.isArray(e)) return 
+
+        const HTMLElement = document.querySelectorAll(e[1]) 
+        HTMLElement.forEach(el => el.addEventListener('keyup', function(event: KeyboardEvent) {
+                e[0](event)
+        }))
+       
+      
     })
     
 })

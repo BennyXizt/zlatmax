@@ -15,7 +15,12 @@ $SETTINGS: (
 $CONTAINER: $DEFAULT_CONTAINER;
 $HEADERS_CLAMP_WIDTH: $DEFAULT_HEADERS_CLAMP_WIDTH;
 
-$P: $DEFAULT_P;
+$P: (
+    font_size_original: 18px,
+    font_size_adaptive: 16px,   
+    line_height: 1.8  
+);
+
 $HEADERS: $DEFAULT_HEADERS;
 
 $BASE: (
@@ -30,19 +35,26 @@ $BASE: (
     max_width: 1920px
 );
 
-$BURGER: (
-    color_primary: map.get($BASE, main_color),
-    color_active: color.scale(map.get($BASE, main_color), $lightness: 80%),
-    origin_top: 6px,
-    origin_bottom: 6px,
-    width: 32px,
-    height: 32px,
-    line_height: 2px,
-    animation_speed: .2s
+$COLORS: (
+    base: map.get($BASE, main_color),
+    white: #fff,
+    black: #1F1C21,
+    background_default: #141414,
+    background_white: #ecf1f2,
+    background_gray: rgba(7, 7, 7, 0.03),
+    border_default: rgba(4, 4, 4, 0.5),
 );
 
-$COLORS: (
-    base: map.get($BASE, main_color)
+$BURGER: (
+    color_primary: map.get($COLORS, white),
+    color_active: color.scale(map.get($BASE, main_color), $lightness: 80%),
+    origin_top: 0px,
+    origin_bottom: 0px,
+    width: 28px,
+    height: 17px,
+    line_height: 3px,
+    border_radius: 10px,
+    animation_speed: .2s
 );
 
 $ANIMATIONSPEEDS: (

@@ -1,0 +1,103 @@
+<%
+	blockClass = 'header'
+%>
+
+<header class="header">
+    <div class="header__top top-header">
+        <div class="top-header__container container">
+            <%- include('externe/components/HeaderMenu/HeaderMenu.ejs', {
+                header_menu_component: {
+                    this: {
+                        parent: 'top-header'
+                    },
+                    list: [
+                        {'href': '#', 'anchor': 'О нас'},
+                        {'href': '#', 'anchor': 'Оплата и доставка'},
+                        {'href': '#', 'anchor': 'Новости'},
+                        {'href': '#', 'anchor': 'Контакты'}
+                    ],
+                    activePage: header_component.activePage ?? ''
+                }
+            }) %>
+            <a href="" class="top-header__user">
+                <%- include('externe/components/Icon/Icon.ejs', {
+                    icon_component: {
+                        this: {
+                            tag: 'div'
+                        },
+                        name: 'user'
+                    }
+                }) %>
+                Личный кабинет
+            </a>
+            <%- include('externe/components/Burger/Burger.ejs', {
+                burger_component: {
+                    this: {
+                        parent: 'top-header'
+                    }
+                }
+            })%>
+        </div>
+    </div>
+    <div class="header__body body-header">
+        <div class="body-header__container container">
+            <% if(typeof header_component.homePage !== 'undefined') { %>
+                <%if(header_component.homePage === true) { %>
+                    <%- include('externe/components/Icon/Icon.ejs', {
+                        icon_component: {
+                            this: {
+                                class: 'body-header__logo'
+                            },
+                            name: 'logo'
+                        }
+                    })%>
+                <% } else { %>
+                    <a href="./" class="header__link-logo">
+                       <%- include('externe/components/Icon/Icon.ejs', {
+                            icon_component: {
+                                this: {
+                                    parent: 'body-header'
+                                },
+                                name: 'logo'
+                            }
+                        })%>
+                    </a>
+                <% } %>
+            <% } %>
+            <div class="body-header__search">
+                <%- include('externe/components/ComboBox/ComboBox.ejs', {
+                    combobox_component: {
+                        this: {
+                            parent: 'body-header',
+                            tag: 'form',
+                            dataAttribute: [
+                                'action=#',
+                                'data-fsc-combobox-search-type=firstLetter',
+                            ]
+                        },
+                        prestyled: [
+                            'list',
+                            // 'input',
+                            'icons',
+                            // 'all'
+                        ],
+                        placeholder: 'Поиск',
+                        icons: {
+                            input_dispose: '/media/icons/sprite.svg#search',
+                            input_close: '/media/icons/sprite.svg#arrow-down',
+                            p: '/media/icons/sprite.svg#arrow-down'
+                        },
+                        data: [
+                            { flag: 'de', city: 'Deutschland' },
+                            { flag: 'fr', city: 'France' },
+                            { flag: 'es', city: 'España' }
+                        ]
+                    }
+                }) %>
+            </div>
+            <div class="body-header__actions">
+
+            </div>
+        </div>
+    </div>
+</header>

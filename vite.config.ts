@@ -35,7 +35,10 @@ export default defineConfig({
           }
           return 'assets/[name][extname]';
         },
-      }
+      },
+      external: [
+        /externe\/plugins\/.*/
+      ]
     }
   },
   server: {
@@ -76,7 +79,11 @@ export default defineConfig({
     },
   },
   css: {
-    postcss: {}
+    preprocessorOptions: {
+      scss: {
+        additionalData: `$BUILD_ENV: "${process.env.NODE_ENV}";`
+      }
+    }
   },
   plugins: [
      qrcode(),
@@ -132,5 +139,8 @@ export default defineConfig({
       outputVideoFormat: [".mp4"],
       posterDirectory: `${__dirname}/public/media/image/poster`
     })
-  ]
+  ],
+  define: {
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+  }
 })

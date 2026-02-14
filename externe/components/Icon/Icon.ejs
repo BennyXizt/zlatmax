@@ -21,7 +21,12 @@
 		return
 	}
 
-	icon_component.this.tag = 'svg'
+	if(typeof icon_component.this !== 'undefined') {
+        icon_component.this = {
+			...icon_component.this,
+            tag: 'svg'
+        }
+    }
 
 	var {blockClass, thisClass, thisID, thisTag, thisStyles, thisDataAttributes} = externe.setupEJSComponent({...icon_component, componentName: 'icon'})
 %>

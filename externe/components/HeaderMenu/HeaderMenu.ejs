@@ -3,6 +3,11 @@
 //
 // <\%- include('externe/components/HeaderMenu/HeaderMenu.ejs', {
 //     header_menu_component: {
+//         this: {
+//		     parent: 'parentClass',
+//		     class: ['childClass'],
+//		     style: ['customStyle']
+//	       },  
 //         activePage: 'activePage',
 //         list: [
 //             {'href': './index.html', 'anchor': 'HomePage'},
@@ -25,6 +30,8 @@
     if(typeof header_menu_component === 'undefined' || !header_menu_component) {
         return
     }
+
+    var {blockClass, thisClass, thisID, thisTag, thisStyles, thisDataAttributes} = externe.setupEJSComponent({...header_menu_component, componentName: 'menu'})
 
     function generateMenu({
         menu,
@@ -87,10 +94,10 @@
     }
 %>
 
-<div class="header__menu menu">
+<<%=thisTag%> <%-thisDataAttributes%> class='<%=thisClass%>' <%-thisID%> <%-thisStyles%>>
     <nav class="menu__body">
         <% if(typeof header_menu_component.list !== 'undefined' && header_menu_component.list) { %>
             <%- generateMenu({menu: header_menu_component.list}) %>
         <% } %>
     </nav>
-</div>
+</<%=thisTag%>>

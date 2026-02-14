@@ -12,11 +12,14 @@
         './base/base';
 
 // internal layout START
+@import
+	'./layout/header';
 // internal layout END
 
 @import 
         '../../../externe/components/Burger/Burger',
         '../../../externe/components/HeaderMenu/HeaderMenu',
+        '../../../externe/components/ComboBox/ComboBox',
         '../../../externe/components/Header/Header';
 
 // internal components START

@@ -5,6 +5,7 @@ import { SVGFolderTranslation } from '../i18n'
 export function updateDummySVGPage({watchedFile, dummyFile, id, translation}: {watchedFile: string, dummyFile: string, id: string, translation: SVGFolderTranslation}) {
     try {
         const relativePath = relative(dirname(dummyFile), watchedFile).replace(/\\/g, '/')
+        
         if(!fs.existsSync(dummyFile) || fs.statSync(dummyFile).size === 0) {
             const 
                 fileContent =
@@ -41,13 +42,18 @@ export function updateDummySVGPage({watchedFile, dummyFile, id, translation}: {w
             translation.newFileAdded(dummyFile)
         }
         else {
-             const 
+            const 
                 rewriteFile = fs.readFileSync(dummyFile, 'utf-8'),
+                isDataExist = rewriteFile.includes(`<svg><use href="${relativePath}#${id}"></use><use href="${relativePath.replace(/\/public/, '')}#${id}"></use></svg>`)
+
+            if(isDataExist) return
+
+            const
                 lastIndex = rewriteFile.lastIndexOf('</li>') + 5,
                 fileContent = 
                 `
                     ${rewriteFile.slice(0, lastIndex)}
-                     <li class="icon">
+                        <li class="icon">
                         <svg><use href="${relativePath}#${id}"></use><use href="${relativePath.replace(/\/public/, '')}#${id}"></use></svg>
                         <span>${id}</span>
                         <div>
@@ -60,10 +66,10 @@ export function updateDummySVGPage({watchedFile, dummyFile, id, translation}: {w
                     </li>
                     ${rewriteFile.slice(lastIndex)}
                 `.trim()
-             
-             fs.writeFileSync(dummyFile, fileContent, 'utf-8')   
-             translation.fileHasBeenUpdated(dummyFile)
             
+            
+            fs.writeFileSync(dummyFile, fileContent, 'utf-8')   
+            translation.fileHasBeenUpdated(dummyFile)
         }
     } catch(e) {
         console.log(e)

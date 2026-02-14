@@ -1,8 +1,28 @@
+@use 'sass:map';
+
+
+$z_index: map.get($ZINDEXES, immortal);
+
 [data-fsc-combobox-id] {
-    --animationDuration: .5s;
-    --animationDelay: .3s;
-    --maxHeightDuration: .8s;
-    --z-index: 1;
+    @mixin hoverEffect {
+        --animationDelay: 0s;
+           
+        ul {
+            max-height: 50dvh;
+            opacity: 1;
+            visibility: visible;
+        }
+
+        svg {
+            &[data-fsc-combobox-input-icon-dispose] {
+                transform: translate(0, -50%) rotate(180deg);
+            }
+            &[data-fsc-combobox-input-icon-close] {
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+    }
 
     ul {
         padding: unset;
@@ -13,83 +33,111 @@
         }
     }
     &[data-fsc-combobox-prestyled] {
+        --animationDuration: .5s;
+        --animationDelay: .3s;
+        --maxHeightDuration: .8s;
+
         position: relative;
         display: flex;
-        
-        svg {
-            &[data-fsc-combobox-input-icon-dispose],
-            &[data-fsc-combobox-p-icon],
-            &[data-fsc-combobox-input-icon-close] {
+
+        &[data-fsc-combobox-prestyled-list] {
+            ul {
                 position: absolute;
-                z-index: var(--z-index);
-                top: 50%;           
-                right: 7px;
-                transform: translate(0, -50%);
-                transform-origin: center;
-                transition: transform var(--animationDuration) ease-in-out var(--animationDelay);      
-                width: 14px;
-                height: 14px;      
-                cursor: pointer;
-            }
-            &[data-fsc-combobox-input-icon-close] {
-                width: 14px;
-                height: 14px;
-                right: 21px;
-                visibility: hidden;
+                z-index: calc($z_index + 2);
+                top: 100%;
+                max-height: 0;
+                width: 100%;
+                overflow: auto;
+                @include rem(border-radius, 8px);   
+                transition: 
+                    max-height var(--maxHeightDuration) ease-in-out,
+                    opacity var(--animationDuration) ease-in-out var(--animationDelay), 
+                    visibility var(--animationDuration) ease-in-out var(--animationDelay);
                 opacity: 0;
-                transition: visibility var(--animationDuration) ease-in-out var(--animationDelay), opacity var(--animationDuration) ease-in-out var(--animationDelay);
-            }
-        }
-        ul {
-            position: absolute;
-            background-color: #fff;
-            z-index: calc(var(--z-index) + 2);
-            top: 100%;
-            max-height: 0;
-            width: 100%;
-            overflow: auto;
-            border-radius: 8px;
-            transition: max-height var(--maxHeightDuration) ease-in-out, opacity var(--animationDuration) ease-in-out var(--animationDelay), visibility var(--animationDuration) ease-in-out var(--animationDelay);
-            opacity: 0;
-            visibility: hidden;
+                visibility: hidden;
 
-            li {
-                cursor: pointer;
+                li {
+                    cursor: pointer;
 
-                p {
-                    position: relative;
+                    p {
+                        position: relative;
+                    }
                 }
             }
         }
-
-        input {
-            flex: 1;
-            z-index: var(--z-index);
+        &[data-fsc-combobox-prestyled-input] {
+            input {
+                flex: 1;
+                z-index: $z_index;
+            }
+            label {
+                z-index: calc($z_index + 1);
+            }
         }
-        label {
-             z-index: calc(var(--z-index) + 1);
+        &[data-fsc-combobox-prestyled-icons] {
+            svg {
+                &[data-fsc-combobox-input-icon-dispose],
+                &[data-fsc-combobox-p-icon],
+                &[data-fsc-combobox-input-icon-close] {
+                    position: absolute;
+                    z-index: $z_index;
+                    top: 50%;           
+                    transform: translate(0, -50%);
+                    transform-origin: center;
+                    transition: transform var(--animationDuration) ease-in-out var(--animationDelay);   
+                    @include rem(right, 7px);   
+                    @include fluid((
+                        width: 30px 14px,
+                        height: 30px 14px
+                    ));
+                    cursor: pointer;
+                }
+                &[data-fsc-combobox-input-icon-close] {
+                    @include fluid((
+                        width: 30px 14px,
+                        height: 30px 14px,
+                        right: 40px 30px
+                    ));
+                    visibility: hidden;
+                    opacity: 0;
+                    transition: 
+                        visibility var(--animationDuration) ease-in-out var(--animationDelay),
+                        opacity var(--animationDuration) ease-in-out var(--animationDelay);
+                }
+            }
         }
-        
-        &[data-fsc-combobox-prestyledtype='full'] {       
+        &[data-fsc-combobox-prestyled-all] {
             flex-flow: column nowrap;
-            min-width: 220px;
+            @include rem(min-width, 240px);
 
             label {
                 position: absolute;
-                top: -12px;
-                left: 8px;
-                font-size: 14px;
                 background-color: #fff;
-                padding: 3px;
+                z-index: calc($z_index + 1);
+                @include rem((
+                    top: -12px,
+                    left: 8px,
+                    font-size: 14px,
+                    padding: 3px
+                ));
             }
             input {
-                padding: 20px 10px;
-                border-radius: 8px;
-                font-size: 18px;
-                line-height: 23px;
                 outline: unset;
                 border: 2px solid black;
                 background-color: #fff;
+                flex: 1;
+                z-index: $z_index;
+                @include rem((
+                    border-radius: 8px,
+                    font-size: 18px,
+                ));
+                @include fluid((
+                    padding-top: 20px 10px,
+                    padding-bottom: 20px 10px,
+                    padding-right: 90px 75px,
+                    padding-left: 20px 10px,
+                ));
+                @include line-height(23px, 18px);
 
                 &:focus,
                 &:focus-visible {
@@ -97,28 +145,59 @@
                 }
             }
             svg {
-                &[data-fsc-combobox-input-icon-dispose] {
-                    width: 30px;
-                    height: 30px;
+                &[data-fsc-combobox-input-icon-dispose],
+                &[data-fsc-combobox-p-icon],
+                &[data-fsc-combobox-input-icon-close] {
+                    position: absolute;
+                    z-index: $z_index;
+                    top: 50%;          
+                    @include rem(right, 7px);
+                    transform: translate(0, -50%);
+                    transform-origin: center;
+                    transition: transform var(--animationDuration) ease-in-out var(--animationDelay);      
+                    @include fluid((
+                        width: 30px 14px,
+                        height: 30px 14px,
+                    ));
+                    cursor: pointer;
                 }
                 &[data-fsc-combobox-input-icon-close] {
-                    width: 30px;
-                    height: 30px;
-                    right: 40px;
+                    @include fluid((
+                        right: 40px 30px
+                    ));
+                    visibility: hidden;
+                    opacity: 0;
+                    transition: visibility var(--animationDuration) ease-in-out var(--animationDelay), opacity var(--animationDuration) ease-in-out var(--animationDelay);
                 }
             }
             
-            ul {                
+            ul {               
+                position: absolute;
+                background-color: #fff;
+                z-index: calc($z_index + 2);
+                top: 100%;
+                max-height: 0;
+                width: 100%;
+                overflow: auto;
+                @include rem(border-radius, 8px);
+                transition: 
+                    max-height var(--maxHeightDuration) ease-in-out,
+                    opacity var(--animationDuration) ease-in-out var(--animationDelay), 
+                    visibility var(--animationDuration) ease-in-out var(--animationDelay);
+                opacity: 0;
+                visibility: hidden; 
                 box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1), 0 6px 15px rgba(0, 0, 0, 0.3);
 
                 li {
                     padding: 12px;
+                    cursor: pointer;
 
                     p {
+                        position: relative;
                         margin: unset;
                         font-weight: 500;
-                        font-size: 18px;
-                        line-height: 23px;
+                        @include rem(font-size, 18px);
+                        @include line-height(23px, 18px);
                     }
 
                     span[data-fsc-combobox-highlited] {
@@ -137,28 +216,15 @@
                 }
             }     
         }
-
         &[data-fsc-combobox-collapsed='true'] {
-            --animationDelay: 0s;
-           
-            ul {
-                max-height: 50dvh;
-                opacity: 1;
-                visibility: visible;
-            }
-
-            svg {
-                &[data-fsc-combobox-input-icon-dispose] {
-                    transform: translate(0, -50%) rotate(180deg);
-                }
-                &[data-fsc-combobox-input-icon-close] {
-                    opacity: 1;
-                    visibility: visible;
-                }
+           @include hoverEffect;
+        }
+        @media (hover: hover) and (pointer:fine) {
+            &:hover {
+               @include hoverEffect;
             }
         }
     }
-   
 }
 
 [data-fsc-combobox-blank] {
@@ -167,5 +233,5 @@
     left: 0;
     width: 100%;
     min-height: 100%;
-    z-index: var(--z-index);
+    z-index: $z_index;
 }

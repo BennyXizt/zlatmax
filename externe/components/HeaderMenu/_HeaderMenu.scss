@@ -4,7 +4,7 @@
 
 @mixin menuLink {
     position: relative;
-    color: map.get($BASE, main_color);
+    color: map.get($COLORS, white);
     transition: color .5s ease-in-out;
 
     &::after {

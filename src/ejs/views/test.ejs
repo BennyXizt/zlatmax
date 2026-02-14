@@ -29,6 +29,20 @@
             </div>
         </div>
     </section>
+	<section class='header_component'>
+        <div class="outer container">
+            <div class="inner">
+                <h6 class="text-center">HEADER Component</h6>
+                <div class="flex items-center gap-x-2">
+                    <%- include('src/ejs/components/header.ejs', {
+                        header_component: {
+                            
+                        }
+                    })%>
+                </div>
+            </div>
+        </div>
+	</section>
 	<script type="module" src="../test.ts"></script>
     <script type="module" src="../../../src/ts/main.ts"></script>
 </body>

@@ -1,34 +1,36 @@
- h1 {
-    text-align: center;
- }
+@if $BUILD_ENV == "development" { 
+   h1 {
+      text-align: center;
+   }
 
- svg {
-    color: rgb(194, 0, 0);
-    width: 30px;
-    height: 30px;
- }
+   svg {
+      color: rgb(194, 0, 0);
+      width: 30px;
+      height: 30px;
+   }
 
- ul {
-    display: flex;
-    flex-flow: row wrap;
-    gap: 10px;
- }
+   ul {
+      display: flex;
+      flex-flow: row wrap;
+      gap: 10px;
+   }
 
- li {
-    display: grid;
-    align-items: center;
-    justify-items: center;
-    grid-template-columns: 30px 400px;
-    border: 1px solid black;
-    padding: 12px;
-    font-weight: bold;
- }
+   li {
+      display: grid;
+      align-items: center;
+      justify-items: center;
+      grid-template-columns: 30px 400px;
+      border: 1px solid black;
+      padding: 12px;
+      font-weight: bold;
+   }
 
- .icon {
-    div {
-        grid-column: 1 / -1;
-    }
-    span {
-        text-align: center;
-    }
- }
+   .icon {
+      div {
+         grid-column: 1 / -1;
+      }
+      span {
+         text-align: center;
+      }
+   }
+}
