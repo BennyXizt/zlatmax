@@ -39,10 +39,13 @@ $COLORS: (
     base: map.get($BASE, main_color),
     white: #fff,
     black: #1F1C21,
+    gray: rgba(0, 0, 0, 0.5),
+    orange: #E8AA31,
     background_default: #141414,
     background_white: #ecf1f2,
     background_gray: rgba(7, 7, 7, 0.03),
     border_default: rgba(4, 4, 4, 0.5),
+    box_shadow_default: rgba(169, 169, 169, 0.18)
 );
 
 $BURGER: (
@@ -58,7 +61,9 @@ $BURGER: (
 );
 
 $ANIMATIONSPEEDS: (
-    base: .5s,
+    long: .5s,
+    base: .4s,
+    short: .3s
 );
 
 $ZINDEXES: (

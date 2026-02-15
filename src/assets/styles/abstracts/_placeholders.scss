@@ -61,3 +61,6 @@
     @include fluid(font-size, 18px 16px);
     @include line-height(22px, 18px);
 }
+%textMetaSmall {
+    @include fluid(font-size, 14px 12px);
+}

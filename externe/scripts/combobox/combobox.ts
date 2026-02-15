@@ -64,9 +64,6 @@ export function comboboxAutoload() {
             searchType,
             imgClose
         })
-
-
-        console.log(HTMLElements);
     }
 }
 export const comboboxOnKeyUpArray = [comboboxOnKeyUp, 'input[data-fsc-combobox]']
@@ -96,8 +93,11 @@ function comboboxClick(_: HTMLElement, event: Event) {
         inputHTMLElement = target.closest<HTMLInputElement>('input[data-fsc-combobox]'),
         closeIconHTMLElement = target.closest('[data-fsc-combobox-input-icon-close]'),
         windowScreenHTMLElement = document.createElement('div'),
-        root = inputHTMLElement?.closest('[data-fsc-combobox-id]')
-
+        root = inputHTMLElement?.closest('[data-fsc-combobox-id]'),
+        ulHTMLElement = root?.querySelector('ul.combobox__list')
+    
+    if(!ulHTMLElement) return
+        
     actionCloseComboBoxOnClick()
     
     if(inputHTMLElement && root && root?.getAttribute('data-fsc-combobox-collapsed') === 'false') {
@@ -185,7 +185,7 @@ function actionFilterList( { ul, input, searchType, originalList }: FilterList) 
             
             return {
                 span,
-                image: e.querySelector('svg')
+                svg: e.querySelector('.combobox__p-icon-wrapper')
             }
             
         })
@@ -196,7 +196,7 @@ function actionFilterList( { ul, input, searchType, originalList }: FilterList) 
             `<li data-fsc-combobox-item>
                 <p>
                     ${e.span}
-                    ${e.image?.outerHTML}
+                    ${e.svg?.outerHTML ?? ''}
                 </p>
             </li>`
         )

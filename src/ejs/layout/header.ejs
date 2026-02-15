@@ -11,10 +11,10 @@
                         parent: 'top-header'
                     },
                     list: [
-                        {'href': '#', 'anchor': 'О нас'},
-                        {'href': '#', 'anchor': 'Оплата и доставка'},
-                        {'href': '#', 'anchor': 'Новости'},
-                        {'href': '#', 'anchor': 'Контакты'}
+                        {'href': './about.html', 'anchor': 'О нас'},
+                        {'href': './prices.html', 'anchor': 'Оплата и доставка'},
+                        {'href': './blog.html', 'anchor': 'Новости'},
+                        {'href': './contacts.html', 'anchor': 'Контакты'}
                     ],
                     activePage: header_component.activePage ?? ''
                 }
@@ -23,7 +23,7 @@
                 <%- include('externe/components/Icon/Icon.ejs', {
                     icon_component: {
                         this: {
-                            tag: 'div'
+                            parent: 'top-header'
                         },
                         name: 'user'
                     }
@@ -69,7 +69,6 @@
                     combobox_component: {
                         this: {
                             parent: 'body-header',
-                            tag: 'form',
                             dataAttribute: [
                                 'action=#',
                                 'data-fsc-combobox-search-type=firstLetter',
@@ -77,26 +76,100 @@
                         },
                         prestyled: [
                             'list',
-                            // 'input',
-                            'icons',
-                            // 'all'
                         ],
                         placeholder: 'Поиск',
                         icons: {
-                            input_dispose: '/media/icons/sprite.svg#search',
-                            input_close: '/media/icons/sprite.svg#arrow-down',
-                            p: '/media/icons/sprite.svg#arrow-down'
+                            input_dispose: {
+                                this: {
+                                    tag: 'button'
+                                },
+                                path: '/media/icons/sprite.svg#search'
+                            },
                         },
-                        data: [
-                            { flag: 'de', city: 'Deutschland' },
-                            { flag: 'fr', city: 'France' },
-                            { flag: 'es', city: 'España' }
-                        ]
+                        // data: [
+                        //     { flag: 'de', city: 'Deutschland' },
+                        //     { flag: 'fr', city: 'France' },
+                        //     { flag: 'es', city: 'España' }
+                        // ]
                     }
                 }) %>
             </div>
-            <div class="body-header__actions">
-
+            <div class="body-header__actions actions-header">
+                <a href='#' class="actions-header__location">
+                    <%- include('externe/components/Icon/Icon.ejs', {
+                        icon_component: {
+                            this: {
+                                class: 'actions-header__location'
+                            },
+                            name: 'location'
+                        }
+                    })%>
+                    Москва
+                </a>
+                <div class="actions-header__phones">
+                    <%- include('externe/components/Accordion/Accordion.ejs', {
+                        accordion_component: {
+                            this: {
+                                parent: 'actions-header'
+                            },
+                            title: {
+                                this: {
+                                    tag: 'a',
+                                    dataAttribute: 'href=tel:+123456789'
+                                },
+                                label: '8-800-777-49-67'
+                            },
+                            icon: 'arrow-down',
+                            body: [
+                                {
+                                    this: {
+                                        tag: 'a',
+                                        dataAttribute: 'href=tel:+123456789'
+                                    },
+                                    label: '8-800-777-49-68'
+                                },
+                                {
+                                    this: {
+                                        tag: 'a',
+                                        dataAttribute: 'href=tel:+123456789'
+                                    },
+                                    label: '8-800-777-49-69'
+                                },
+                                {
+                                    this: {
+                                        tag: 'a',
+                                        dataAttribute: 'href=tel:+123456789'
+                                    },
+                                    label: '8-800-777-49-70'
+                                },
+                        
+                            ]
+                        }
+                    })%>
+                    <button class="actions-header__callback">Заказать звонок</button>
+                </div>
+                <a href="#" class="actions-header__favourite"></a>
+                <div class="actions-header__cart cart-header">
+                    <div class="cart-header__icon">
+                        <%- include('externe/components/Icon/Icon.ejs', {
+                            icon_component: {
+                                this: {
+                                    parent: 'cart-header'
+                                },
+                                name: 'cart'
+                            }
+                        }) %>
+                        <span>0</span>
+                    </div>
+                    <div class="cart-header__body">
+                        <div class="cart-header__summ">
+                            0 р.
+                        </div>
+                        <a href="#" class="cart-header__link">
+                            Оформить заказ
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

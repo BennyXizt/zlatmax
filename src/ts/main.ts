@@ -4,6 +4,7 @@ import '@/assets/styles/main.scss'
 import { BurgerMenu } from '~/components'
 // @ts-ignore
 import { autoloader } from '~/scripts/autoloader/autoloader'
+import { ClickedModule } from './types/plugin.type'
 
 window.addEventListener('click', function(e) {
     const 
@@ -32,15 +33,13 @@ document.fonts.ready.then(async() => {
             .forEach(e => e())
 
     const
-        onClickedModules = Array.from(loadedModules)
-            .filter(([k, e]) => typeof e[`${k}ClickArray`] === 'object')
-            .map(e => {
-                return {
-                    func: e[1][`${e[0]}ClickArray`][0],
-                    elementSelector: e[1][`${e[0]}ClickArray`][1] || `[data-fsc-${e[0]}]`
-                }
-            })
-    
+        onClickedModules: ClickedModule[] = Array.from(loadedModules)
+            .flatMap(([_, e]) =>
+                Object.entries(e)
+                    .filter(([key]) => key.endsWith('ClickArray'))
+                    .map(([, value]) => value as ClickedModule)
+            )
+            
     const
         onIntersectionModules = Object.fromEntries(
              Array.from(loadedModules)
@@ -93,14 +92,18 @@ document.fonts.ready.then(async() => {
     for(const element of Object.values(onIntersectionModules)) {
         document.querySelectorAll(element.elementSelector).forEach(el => observer.observe(el))
     }
+    
+    window.addEventListener('pointerdown', function(event) {
+        const target = event.target;
 
-    window.addEventListener('click', function(event) {
+        if (!(target instanceof Element)) return;
+
         onClickedModules.forEach(e => {
             const 
-                DOMElement: HTMLElement | null = (event.target as HTMLElement).closest(e.elementSelector)
+                DOMElement: HTMLElement | null = (event.target as HTMLElement).closest(e[1])
                 
             if(DOMElement)
-                e.func(DOMElement, event)
+                e[0](DOMElement, event)
             
         })
     })
@@ -121,8 +124,6 @@ document.fonts.ready.then(async() => {
         HTMLElement.forEach(el => el.addEventListener('keyup', function(event: KeyboardEvent) {
                 e[0](event)
         }))
-       
-      
     })
     
 })

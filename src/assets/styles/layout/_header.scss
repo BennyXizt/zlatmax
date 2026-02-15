@@ -1,5 +1,244 @@
 @use 'sass:map';
 
 .header {
-    
+    &__top {
+        @include rem((
+            padding-top: 10px,
+            padding-bottom: 10px,
+        ))
+    }
+    &__body {
+        @include rem((
+            padding-top: 10px,
+            padding-bottom: 10px,
+        ))
+    }
+}
+
+.menu {
+    &__list {
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        @include fluid(gap, 60px 30px);
+    }
+    &__link {
+        @extend %textMeta;
+    }
+}
+
+.top-header {
+    box-shadow: 0 4px 20px 0 map.get($COLORS, box_shadow_default);
+    background: map.get($COLORS, background_default);
+    color: map.get($COLORS, white);
+
+    &__container {
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        @include rem(gap, 20px);
+        @include rem(min-height, 50px);
+    }
+
+    &__user {
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        justify-content: flex-end;
+        @include fluid(gap, 15px 8px);
+        
+        svg {
+            width: 100%;
+            @include fluid((
+                flex-basis: 22px 20px,
+                height: 28px 20px,
+            ));
+        }
+    }
+
+    @include media(tablet) {
+        & &__burger {
+            display: none;
+        }
+    }
+}
+
+.body-header {
+    background-color: map.get($COLORS, background_white);
+
+    &__container {
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        @include rem(min-height, 70px);
+    }
+
+    &__logo {
+        color: map.get($COLORS, black);
+
+        @include fluid( width, 190px 150px);
+        @include rem(height, 43px);
+    }
+
+    &__search {
+        flex: 1 1 auto;
+        @include fluid(padding-left, 158px 20px);
+        @include rem(padding-right, 20px);
+    }
+
+    &__combobox {
+        @include rem(max-width, 377px);
+        background-color: map.get($COLORS, background_gray);
+        position: relative;
+
+        .combobox {    
+            &__input {
+                @extend %textMetaSmall;
+                width: 100%;
+                border-radius: 3px;
+                border: 1px solid map.get($COLORS, border_default);
+
+                @include fluid((
+                    height: 41px 30px
+                ));
+                @include fluid((
+                    padding-left: 50px 38px,
+                    padding-right: 20px 10px
+                ));
+
+                &::placeholder {
+                    color: map.get($COLORS, gray);
+                }
+
+                &:focus {
+                    border-color: map.get($COLORS, base);
+                }
+            }
+
+            &__dispose {
+                @include rem((
+                    width: 12px,
+                    height: 12px,
+                ));
+
+                &-wrapper {
+                    position: absolute;
+                    top: 50%;
+                    transform: translate(0, -50%);
+                    background-color: transparent;
+                    color: map.get($COLORS, gray);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+
+                    @include rem(left, 8px);
+                    @include fluid((
+                        width: 41px 30px,
+                        height: 41px 30px,
+                    ));
+                }
+            }
+        }
+        
+    }
+}
+
+.actions-header {
+    display: flex;
+    align-items: center;
+    @include fluid(gap, 30px 10px);
+
+    &__location {
+        display: inline-flex;
+        flex-flow: row wrap;
+        align-items: center;
+        @include fluid((
+            gap: 10px 5px,
+            margin-right: 25px 10px
+        ));
+        @extend %textMetaLarge;
+
+        svg {
+            width: 100%;
+
+            @include fluid((
+                flex-basis: 17px 10px,
+                height: 25px 16px,
+            ));
+        }
+    }
+
+    &__phones {
+        display: flex;
+        flex-flow: column nowrap;
+        align-items: flex-start;
+        gap: 3px;
+    }
+
+    &__accordion {
+        .accordion {
+            &__top {
+                @include fluid(column-gap, 17px 10px);
+            }
+            &__title,
+            &__body {
+                @extend %textMetaLarge;
+            }
+
+            &__body {
+                background-color: map.get($COLORS, white);
+                border-radius: 3px;
+                overflow: hidden;
+            }
+
+            &__item {
+                @include rem(padding, 8px);
+            }
+
+            &__figure {
+                @include rem((
+                    flex-basis: 16px
+                ));
+            }
+            &__icon {
+                @include rem((
+                    width: 16px,
+                    height: 10px
+                ));
+                color: map.get($COLORS, orange);
+            }
+        }
+
+        &[data-fsc-accordion-active] {
+            .accordion {
+                &__icon {
+                    transform: rotate(180deg);
+                }
+                &__body {
+                    @include fluid(margin-top, 15px 10px);
+                    @include rem(margin-bottom, 7px);
+                }
+            }
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            &:hover {
+                .accordion {
+                    &__icon {
+                        transform: rotate(180deg);
+                    }
+                    &__body {
+                        @include fluid(margin-top, 15px 10px);
+                        @include rem(margin-bottom, 7px);
+                    }
+                }
+            }
+            .accordion {
+                &__item:hover {
+                    background-color: map.get($COLORS, orange);
+                    color: map.get($COLORS, white);
+                }
+            }
+        }
+    }
 }

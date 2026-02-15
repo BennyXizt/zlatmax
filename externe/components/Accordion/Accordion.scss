@@ -1,10 +1,20 @@
+@use 'sass:map';
+
+@mixin accordionHover {
+    opacity: 1;
+    visibility: visible;
+    transform: scaleY(1);
+}
+
 [data-fsc-accordion] {
+    $animationLang: map.get($ANIMATIONSPEEDS, short);
+    $animationShort: map.get($ANIMATIONSPEEDS, short);
+
     [data-fsc-accordion-summary] {
         cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        @include rem(column-gap, 10px);
     }
     [data-fsc-accordion-body] {
         transform: scaleY(0);
@@ -12,24 +22,24 @@
         max-height: 0;
         opacity: 0;
         visibility: hidden;
-        transition: .3s ease-in-out;
+        transition: $animationShort ease-in-out;
         transition-property: max-height, transform, opacity, visibility;
+    }
+    [data-fsc-accordion-icon] {
+        transition: $animationLang ease-in-out;
+        transition-property: transform;
     }
 
     &[data-fsc-accordion-active] {
         [data-fsc-accordion-body] {
-            opacity: 1;
-            visibility: visible;
-            transform: scaleY(1);
+            @include accordionHover;
         }
     }
 
     @media (hover: hover) and (pointer: fine) {
         &:hover {
             [data-fsc-accordion-body] {
-                opacity: 1;
-                visibility: visible;
-                transform: scaleY(1);
+                @include accordionHover;
                 max-height: 500px;
             }
         }

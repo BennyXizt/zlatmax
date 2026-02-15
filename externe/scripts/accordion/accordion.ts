@@ -1,17 +1,17 @@
 
 let tempParticle: HTMLElement[] = []
 
-export const accordionClickArray = [accordionClick, '[data-fsc-accordion-summary]']
+export const accordionIconClickArray = [accordionIconClick, '[data-fsc-accordion-touch]']
 
-function accordionClick(element: HTMLElement) {
+function accordionIconClick(element: HTMLElement) {
     const 
+        hoverSupported = window.matchMedia('(hover: hover) and (pointer: fine)').matches,
         accordion = element.closest('[data-fsc-accordion]') as HTMLElement,
         dataBehaviourType = accordion?.getAttribute('data-fsc-accordion-behaviour'),
         dataMediaVisibility = accordion?.getAttribute('data-fsc-accordion-media-query')
         
-    if(dataMediaVisibility && !window.matchMedia(`(${dataMediaVisibility})`).matches) 
-        return
-
+    if((accordion && dataMediaVisibility && !window.matchMedia(`(${dataMediaVisibility})`).matches) || hoverSupported) return
+    
     if(dataBehaviourType !== 'default') {
         tempParticle.forEach(e => {
             if(e.hasAttribute('style'))
@@ -27,7 +27,6 @@ function accordionClick(element: HTMLElement) {
         hiddenPart = accordion.querySelector('[data-fsc-accordion-body]') as HTMLElement || element.querySelector('.accordion__body') as HTMLElement,
         clone = hiddenPart!.cloneNode(true) as HTMLElement
     
-    
     accordion.toggleAttribute('data-fsc-accordion-active')
 
     clone.style.cssText = 
@@ -37,11 +36,9 @@ function accordionClick(element: HTMLElement) {
         height: max-content;
         max-height: unset;
     `
-
     accordion!.append(clone)
     const cloneHeight = window.getComputedStyle(clone).height
     clone.remove()
-    
 
     if(accordion.hasAttribute('data-fsc-accordion-active')) {
         hiddenPart.style.maxHeight = cloneHeight
@@ -53,4 +50,5 @@ function accordionClick(element: HTMLElement) {
     else {
         hiddenPart.removeAttribute('style')
     }
+    
 }

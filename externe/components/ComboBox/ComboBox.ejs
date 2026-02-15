@@ -20,9 +20,24 @@
 //         label: 'Выберите город',
 //         placeholder: 'Начните вводить',
 //         icons: {
-//             input_dispose: '/media/icons/sprite.svg#angle-down-solid-full',
-//             input_close: '/media/icons/sprite.svg#xmark-solid-full',
-//             p: '/media/icons/sprite.svg#plus-solid-full'
+//             input_dispose: {
+//               this: {
+//                  tag: 'button'
+//               },
+//               path: '/media/icons/sprite.svg#dispose'
+//             },
+//             input_close: {
+//               this: {
+//                  tag: 'button'
+//               },
+//               path: '/media/icons/sprite.svg#close'
+//             },
+//             p: {
+//               this: {
+//                  tag: 'button'
+//               },
+//               path: '/media/icons/sprite.svg#dispose'
+//             },
 //         },
 //         data: [
 //             { flag: 'de', city: 'Deutschland' },
@@ -37,15 +52,12 @@
         return
     }
 
-    if(typeof combobox_component.this !== 'undefined') {
-        combobox_component.this = {
-			...combobox_component.this,
-            tag: 'form'
-        }
-    }
+    combobox_component.this = {
+		...combobox_component.this,
+		tag: combobox_component.this?.tag ?? 'form'
+	}
     
     var {blockClass, thisClass, thisID, thisTag, thisStyles, thisDataAttributes} = externe.setupEJSComponent({...combobox_component, componentName: 'combobox'})
-
 
     var input_placeholder = undefined
     if(typeof combobox_component.placeholder !== 'undefined' && combobox_component.placeholder)
@@ -84,19 +96,43 @@
     <input type="text" id=<%=input_id%> <%-input_placeholder%> data-fsc-combobox class='combobox__input'>
     <% if (
         (typeof combobox_component.icons !== 'undefined' && combobox_component.icons) &&
-        (typeof combobox_component.icons.input_dispose !== 'undefined' && combobox_component.icons.input_dispose)
+        (typeof combobox_component.icons.input_dispose !== 'undefined' && combobox_component.icons.input_dispose) &&
+        (typeof combobox_component.icons.input_dispose.path !== 'undefined' && combobox_component.icons.input_dispose.path)
     ) { %>
-        <svg data-fsc-combobox-input-icon-dispose data-fsc-combobox class="combobox__dispose">
-            <use href='<%=combobox_component.icons.input_dispose%>'></use>
-        </svg>
+        <% if(
+            (typeof combobox_component.icons.input_dispose.this !== 'undefined' && combobox_component.icons.input_dispose.this) &&
+            (typeof combobox_component.icons.input_dispose.this.tag !== 'undefined' && combobox_component.icons.input_dispose.this.tag !== 'svg') 
+        ) { %>
+            <<%=combobox_component.icons.input_dispose.this.tag %> class='combobox__dispose-wrapper'>
+                <svg data-fsc-combobox-input-icon-dispose data-fsc-combobox class="combobox__dispose">
+                    <use href='<%=combobox_component.icons.input_dispose.path%>'></use>
+                </svg>
+            </<%=combobox_component.icons.input_dispose.this.tag %>>
+        <% } else { %>
+            <svg data-fsc-combobox-input-icon-dispose data-fsc-combobox class="combobox__dispose">
+                <use href='<%=combobox_component.icons.input_dispose.path%>'></use>
+            </svg>
+        <% } %>
     <% } %>
     <% if(
         (typeof combobox_component.icons !== 'undefined' && combobox_component.icons) &&
-        (typeof combobox_component.icons.input_close !== 'undefined' && combobox_component.icons.input_close)
+        (typeof combobox_component.icons.input_close !== 'undefined' && combobox_component.icons.input_close) &&
+        (typeof combobox_component.icons.input_close.path !== 'undefined' && combobox_component.icons.input_close.path)
     ) { %>
-        <svg data-fsc-combobox-input-icon-close data-fsc-combobox class="combobox__close">
-            <use href='<%=combobox_component.icons.input_close%>'></use>
-        </svg>
+        <% if(
+            (typeof combobox_component.icons.input_close.this !== 'undefined' && combobox_component.icons.input_close.this) &&
+            (typeof combobox_component.icons.input_close.this.tag !== 'undefined' && combobox_component.icons.input_close.this.tag !== 'svg') 
+        ) { %>
+            <<%=combobox_component.icons.input_close.this.tag %> class='combobox__close-wrapper'>
+                <svg data-fsc-combobox-input-icon-close data-fsc-combobox class="combobox__close">
+                    <use href='<%=combobox_component.icons.input_close.path%>'></use>
+                </svg>
+            </<%=combobox_component.icons.input_close.this.tag %>>
+        <% } else { %>
+            <svg data-fsc-combobox-input-icon-close data-fsc-combobox class="combobox__close">
+                <use href='<%=combobox_component.icons.input_close.path%>'></use>
+            </svg>
+        <% } %>
     <% } %>
     <% if(typeof combobox_component.data !== 'undefined' && combobox_component.data) { %>
         <ul class="combobox__list">
@@ -104,10 +140,26 @@
                 <li data-fsc-combobox-item class="combobox__item">
                     <p>
                         <%=Object.values(obj).join(' ') %>
-                        <% if(typeof combobox_component.icons.p !== 'undefined' && combobox_component.icons.p) { %>
-                             <svg data-fsc-combobox-item data-fsc-combobox-p-icon class="combobox__p-icon">
-                                <use href='<%=combobox_component.icons.p%>'></use>
-                            </svg>
+                        <% if(
+                            (typeof combobox_component.icons !== 'undefined' && combobox_component.icons) &&
+                            (typeof combobox_component.icons.p !== 'undefined' && combobox_component.icons.p) &&
+                            (typeof combobox_component.icons.p.path !== 'undefined' && combobox_component.icons.p.path)
+
+                        ) { %>
+                            <% if(
+                                (typeof combobox_component.icons.p.this !== 'undefined' && combobox_component.icons.p.this) &&
+                                (typeof combobox_component.icons.p.this.tag !== 'undefined' && combobox_component.icons.p.this.tag !== 'svg') 
+                            ) { %>
+                                <<%=combobox_component.icons.p.this.tag %> class='combobox__p-icon-wrapper'>
+                                    <svg data-fsc-combobox-item data-fsc-combobox-p-icon class="combobox__p-icon">
+                                        <use href='<%=combobox_component.icons.p.path%>'></use>
+                                    </svg>
+                                </<%=combobox_component.icons.p.this.tag %>>
+                            <% } else { %>
+                                <svg data-fsc-combobox-item data-fsc-combobox-p-icon class="combobox__p-icon">
+                                    <use href='<%=combobox_component.icons.p.path%>'></use>
+                                </svg>
+                            <% } %>
                         <% } %>
                     </p>
                 </li>

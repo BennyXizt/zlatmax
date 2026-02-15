@@ -17,22 +17,29 @@
 //	}) %>
 %>
 <%
-	if(typeof icon_component === 'undefined' || !icon_component) {
+	if(
+		(typeof icon_component === 'undefined' || !icon_component) &&
+		(typeof icon_component.name === 'undefined' || !icon_component.name)
+	) {
 		return
 	}
 
-	if(typeof icon_component.this !== 'undefined') {
-        icon_component.this = {
-			...icon_component.this,
-            tag: 'svg'
-        }
-    }
-
+	icon_component.this = {
+		...icon_component.this,
+		tag: icon_component.this?.tag ?? 'svg'
+	}
+	
 	var {blockClass, thisClass, thisID, thisTag, thisStyles, thisDataAttributes} = externe.setupEJSComponent({...icon_component, componentName: 'icon'})
 %>
 
-<<%=thisTag%> <%-thisDataAttributes%> class='<%=thisClass%>' <%-thisID%> <%-thisStyles%>>
-	<% if(typeof icon_component.name !== 'undefined' && icon_component.name) { %>
+<% if(thisTag === 'svg') { %>
+	<svg <%-thisDataAttributes%> class='<%=thisClass%>' <%-thisID%> <%-thisStyles%>>
 		<use href="/media/icons/sprite.svg#<%= icon_component.name%>"></use>   
-	<% } %>
-</<%=thisTag%>>
+	</svg>
+<% } else { %>
+	<<%=thisTag%> <%-thisDataAttributes%> class='<%=thisClass%>' <%-thisID%> <%-thisStyles%>>
+		<svg>
+			<use href="/media/icons/sprite.svg#<%= icon_component.name%>"></use>   
+		</svg>
+	</<%=thisTag%>>
+<% } %>
